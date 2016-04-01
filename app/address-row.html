@@ -1,0 +1,30 @@
+<dom-module id="address-row">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 100px;
+        font-size: 18px;
+        line-height: 1.4em;
+        padding-left: 40px;
+      }
+
+    </style>
+
+    <p>
+      [[address.street]]
+      <br/>
+      [[address.city]], [[address.state]] [[address.zip]]
+      <br/>
+      [[address.country]]
+    </p>
+  </template>
+  <script>
+    Polymer({
+      is: 'address-row',
+      properties: {
+        address: Object
+      }
+    });
+  </script>
+</dom-module>

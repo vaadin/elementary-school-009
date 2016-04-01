@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>Vaadin Elementary School</title>
+    <style>
+      body {
+        font-family: 'Helvetica Neue', Helvetica, sans-serif;
+      }
+
+    </style>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.min.js"></script>
+    <link rel="import" href="bower_components/iron-ajax/iron-ajax.html">
+    <link rel="import" href="bower_components/vaadin-grid/vaadin-grid.html">
+    <link rel="import" href="address-row.html">
+  </head>
+
+  <body>
+    <template is="dom-bind" id="app">
+      <h1>Vaadin Elementary School Signups</h1>
+      <iron-ajax auto url="http://demo.vaadin.com/demo-data/1.0/people" handle-as="json" last-response="{{peopleResponse}}"></iron-ajax>
+      <vaadin-grid items="{{peopleResponse.result}}">
+        <table>
+          <colgroup>
+            <col name="firstName"/>
+            <col name="lastName"/>
+            <col name="email"/>
+            <col name="address.phone"/>
+          </colgroup>
+        </table>
+      </vaadin-grid>
+    </template>
+    <script type="text/javascript">
+
+      window.addEventListener('WebComponentsReady', function () {
+        var grid = document.querySelector('vaadin-grid');
+
+        grid.rowDetailsGenerator = function (rowIndex) {
+          var addressRow = document.createElement('address-row');
+
+          grid.getItem(rowIndex, function (error, item) {
+            if (!error) {
+              addressRow.address = item.address;
+            }
+          });
+
+          return addressRow;
+        };
+
+        var detailsOpenIndex = -1;
+        grid.addEventListener('selected-items-changed', function () {
+          grid.setRowDetailsVisible(detailsOpenIndex, false);
+          var selected = grid.selection.selected();
+          if (selected.length === 1) {
+            grid.setRowDetailsVisible(selected[0], true);
+            detailsOpenIndex = selected[0];
+          }
+        });
+      });
+    </script>
+  </body>
+
+</html>
